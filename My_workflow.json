@@ -1,0 +1,100 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "resource": "library"
+      },
+      "id": "2da26c69-aa95-40eb-925b-c5e3e8a32315",
+      "name": "Spotify",
+      "type": "n8n-nodes-base.spotify",
+      "typeVersion": 1,
+      "position": [
+        500,
+        340
+      ],
+      "credentials": {
+        "spotifyOAuth2Api": {
+          "id": "daX9Eo3CbEu9Cgvf",
+          "name": "Spotify account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ohashi.nohost.me/api/notes/create",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"i\": \"2fzZzRZSWBjNJEhlqlDp0fZ1xqVsHk9k\",\n  \"text\": \"Now Playing {{ $json.track.name }}-{{ $json.track.album.artists[0].name }}-{{ $json.track.preview_url }} \",\n  \"visibility\": \"followers\"\n}",
+        "options": {}
+      },
+      "id": "9e2489da-72fb-4729-a592-81202bc6f2a4",
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        680,
+        340
+      ],
+      "executeOnce": true,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "id": "c0e67a0d-27bd-4c63-a9f2-33c8e4423e17",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        340
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Spotify": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Spotify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3cc340d8-1bef-4080-9697-512d72f4c7e8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b19cca44bb4431a11432519fd7019bd8bec2504daf099834bb962e7a5fdb9fe9"
+  },
+  "id": "2N5SoOIPGOJAkG9U",
+  "tags": []
+}
